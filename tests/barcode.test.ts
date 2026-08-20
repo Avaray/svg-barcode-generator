@@ -201,10 +201,12 @@ describe('Barcode Generator', () => {
       const code = '0112345678901234';
       const svg = SvgBarCodeGenerator.generate(code, 'gs1_128');
       expect(svg).toContain('<svg');
-      // ZXing might prefix with ]C1 (symbology identifier) or just return raw data
       const decoded = decodeSvg(svg, [BarcodeFormat.CODE_128]);
-      // Some decoders strip FNC1, some include the raw text. Let's just expect it contains the code.
-      expect(decoded.includes(code)).toBe(true);
+      // GS1-128 is Code 128 with FNC1 injected in position 1.
+      // Physical/hardware scanners (phones, handheld scanners) prefix the output with
+      // the AIM Symbology Identifier "]C1" — e.g. "]C10112345678901234".
+      // The @zxing/library JS port strips this prefix and returns raw data only.
+      expect(decoded).toBe(code);
     });
   });
 
