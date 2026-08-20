@@ -59,30 +59,13 @@ export const Barcode = () => {
 };
 ```
 
-#### Options (ITF-14)
-
-ITF-14 supports an optional third argument to control [Bearer Bars](https://en.wikipedia.org/wiki/ITF-14#Bearer_bars) - the horizontal borders required by the GS1 standard for physical label printing. They are enabled by default.
-
-```ts
-// With bearer bars (GS1-compliant, default)
-SvgBarcodeGenerator.generate("1234567890123", "itf_14");
-
-// Without bearer bars (cleaner SVG, easier to style)
-SvgBarcodeGenerator.generate("1234567890123", "itf_14", { bearerBars: false });
-```
-
 #### Coloring with Tailwind CSS
 
-Since the generated SVG has no hardcoded colors, bars inherit the `fill` CSS property and the background is transparent. You can apply any color via Tailwind:
+Since the generated SVG has no hardcoded colors, bars inherit the `fill` CSS property and the background is transparent. You can apply any color using standard CSS or Tailwind classes. 
 
 ```tsx
-// Black bars on white background
-<div className="bg-white text-black fill-current">
-  <div dangerouslySetInnerHTML={{ __html: svg }} />
-</div>
-
-// Dark bars on colored background
-<div className="bg-yellow-100 text-gray-900 fill-current">
+// Classic: Black bars on white background (safest for physical scanners)
+<div className="bg-white fill-black">
   <div dangerouslySetInnerHTML={{ __html: svg }} />
 </div>
 ```
