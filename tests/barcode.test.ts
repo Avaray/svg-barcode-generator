@@ -71,7 +71,14 @@ function decodeSvg(svgString: string, formats: BarcodeFormat[]): string {
   // returns a number instead of { rowOffset, resultString } which UPCEANReader expects.
   // Our SVG binary generation is verified to be 100% correct, but ZXing throws NotFoundException.
   if (formats.includes(BarcodeFormat.UPC_E)) {
-    expect(() => reader.decode(bitmap, hints)).toThrow();
+    // Suppress console.warn to prevent ZXing from polluting test output
+    const originalWarn = console.warn;
+    console.warn = () => {};
+    try {
+      expect(() => reader.decode(bitmap, hints)).toThrow();
+    } finally {
+      console.warn = originalWarn;
+    }
     return '01234565';
   }
 
