@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-08-20
+
 ### Added
 - GS1-128 barcode generation support (`gs1_128`), fully leveraging existing Code-128 engine with automatic FNC1 injection.
 - ITF-14 barcode generation support (`itf_14`), featuring automatic Mod10 check digit calculation and SVG Bearer Bars.
