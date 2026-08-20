@@ -1,4 +1,4 @@
-# ✨ SVG Barcode Generator
+# 🦓 SVG Barcode Generator
 
 Simple one-dimensional [barcode](https://en.wikipedia.org/wiki/Barcode) generator focused on scalability and themability.\
 Created to be easy to use, lightweight, and compatible with [Tailwind CSS](https://tailwindcss.com/).
