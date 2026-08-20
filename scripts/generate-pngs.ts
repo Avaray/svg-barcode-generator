@@ -32,7 +32,7 @@ async function run() {
       .replace(/width="100%"/, 'width="800"')
       .replace(/height="100%"/, 'height="200"');
     
-    // Dodajemy białe tło (tzw. "quiet zone") dla czytelności skanera
+    // Add white background and quiet zone to the SVG before rendering to PNG
     const QUIET_ZONE_PX = 40;
     const totalW = 800 + QUIET_ZONE_PX * 2;
     const totalH = 200 + QUIET_ZONE_PX * 2;
