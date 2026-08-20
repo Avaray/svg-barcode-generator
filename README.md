@@ -32,19 +32,37 @@ Created to be easy to use, lightweight, and compatible with [Tailwind CSS](https
 - [Tree-shakeable](https://en.wikipedia.org/wiki/Tree_shaking) - your bundler automatically removes unused formats to keep your app lightweight.
 - Dependency-free.
 
+## Installation
+
+```bash
+# using NPM
+npm install svg-barcode-generator
+
+# using PNPM
+pnpm add svg-barcode-generator
+
+# using Bun
+bun add svg-barcode-generator
+
+# using Deno
+deno add npm:svg-barcode-generator
+```
+
 ## Usage
 
-#### Basic
+### Basic
+
+Output is a string containing the SVG markup. 
 
 ```ts
 import SvgBarcodeGenerator from "svg-barcode-generator";
 
 const svg = SvgBarcodeGenerator.generate("7423522549551", "ean_13");
 
-console.log(svg); // <svg ...>...</svg>
+console.log(svg);
 ```
 
-#### React + Tailwind CSS
+### React + Tailwind CSS
 
 Since the generated SVG has no hardcoded colors, bars inherit the `fill` CSS property and the background is transparent. You can apply any color using standard CSS or Tailwind classes. 
 
