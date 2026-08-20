@@ -46,28 +46,20 @@ console.log(svg); // <svg ...>...</svg>
 
 #### React + Tailwind CSS
 
+Since the generated SVG has no hardcoded colors, bars inherit the `fill` CSS property and the background is transparent. You can apply any color using standard CSS or Tailwind classes. 
+
 ```tsx
 import SvgBarcodeGenerator from "svg-barcode-generator";
 
 export const Barcode = () => {
   const svg = SvgBarcodeGenerator.generate("7423522549551", "ean_13");
   return (
-    <div className="p-6 bg-white fill-current text-black">
+    // Classic: Black bars on white background (safest for physical scanners)
+    <div className="bg-white fill-black p-6">
       <div dangerouslySetInnerHTML={{ __html: svg }} />
     </div>
   );
 };
-```
-
-#### Coloring with Tailwind CSS
-
-Since the generated SVG has no hardcoded colors, bars inherit the `fill` CSS property and the background is transparent. You can apply any color using standard CSS or Tailwind classes. 
-
-```tsx
-// Classic: Black bars on white background (safest for physical scanners)
-<div className="bg-white fill-black">
-  <div dangerouslySetInnerHTML={{ __html: svg }} />
-</div>
 ```
 
 ## Notes on specific formats
