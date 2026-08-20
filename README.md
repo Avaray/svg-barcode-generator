@@ -1,4 +1,4 @@
-# SVG Barcode Generator
+# ✨ SVG Barcode Generator
 
 Simple one-dimensional [barcode](https://en.wikipedia.org/wiki/Barcode) generator focused on scalability and themability.\
 Created to be easy to use, lightweight, and compatible with [Tailwind CSS](https://tailwindcss.com/).
@@ -96,12 +96,9 @@ Since the generated SVG has no hardcoded colors, bars inherit the `fill` CSS pro
 ## Materials
 
 - [Color Selection for Barcode Symbols](https://www.barcode.graphics/upc-color-guide)
-- [GS1 Barcode Types](https://www.gs1.org/standards/barcodes)
 - [Barcode Symbologies – Scandit](https://www.scandit.com/products/barcode-scanning/symbologies)
 - [Wikipedia – Barcode](https://en.wikipedia.org/wiki/Barcode)
 
-## Support the project
+## License
 
-If you see potential in this project and want to help — feel free to contribute.
-
-You can contact me on [LinkedIn](https://www.linkedin.com/in/wasowsky/) or Discord: `avaray_`
+This project is licensed under the [MIT License](LICENSE).
