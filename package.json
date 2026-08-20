@@ -55,7 +55,7 @@
   "name": "svg-barcode-generator",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Avaray/svg-barcode-generator"
+    "url": "https://github.com/Avaray/svg-barcode-generator.git"
   },
   "scripts": {
     "build": "tsdown",
