@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVG Barcode Generator - Dev Playground</title>
+  
+  <!-- Tailwind CSS v4 Browser Build -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  
+  <!-- Local Library Build (IIFE) -->
+  <script src="../dist/index.iife.js"></script>
+
+  <style>
+    /* Ensure the barcode SVG scales nicely in the preview container */
+    .barcode-preview svg {
+      width: 100%;
+      height: 100%;
+      min-height: 120px;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 font-sans">
+  <div id="app" class="max-w-5xl mx-auto p-6 lg:p-12">
+    <header class="mb-8 flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-slate-900 tracking-tight">SVG Barcode Generator</h1>
+        <p class="text-slate-500 mt-1">Live development playground</p>
+      </div>
+      <a href="https://github.com/Avaray/svg-barcode-generator" target="_blank" class="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
+        GitHub Repository &rarr;
+      </a>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- CONTROLS -->
+      <div class="md:col-span-1 space-y-6 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        
+        <div>
+          <label class="block text-sm font-semibold text-slate-900 mb-1">Barcode Format</label>
+          <select v-model="format" class="w-full rounded-md border border-slate-300 p-2 text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow bg-slate-50">
+            <option v-for="fmt in formats" :key="fmt" :value="fmt">{{ fmt }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-900 mb-1">Data / Value</label>
+          <input type="text" v-model="data" class="w-full rounded-md border border-slate-300 p-2 text-slate-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow font-mono text-sm bg-slate-50" placeholder="Enter barcode data...">
+        </div>
+
+        <div v-if="format === 'itf_14'" class="p-3 bg-blue-50 rounded-md border border-blue-100">
+          <label class="flex items-center space-x-2 text-sm text-blue-900 cursor-pointer">
+            <input type="checkbox" v-model="bearerBars" class="rounded text-blue-600 focus:ring-blue-500 cursor-pointer w-4 h-4">
+            <span class="font-medium">Show Bearer Bars (GS1)</span>
+          </label>
+        </div>
+
+        <div class="pt-6 border-t border-slate-100">
+          <label class="block text-sm font-semibold text-slate-900 mb-3">Color Scheme (Tailwind)</label>
+          <div class="grid grid-cols-2 gap-3">
+            <button v-for="scheme in colorSchemes" :key="scheme.name" 
+                    @click="activeScheme = scheme"
+                    :class="['p-3 rounded-lg border text-sm text-left transition-all', 
+                             activeScheme.name === scheme.name ? 'ring-2 ring-blue-500 border-blue-500 shadow-sm' : 'border-slate-200 hover:border-slate-300']">
+              <span class="block font-medium text-slate-900">{{ scheme.name }}</span>
+              <span class="block text-xs text-slate-500 mt-1 font-mono">{{ scheme.bg.split('-')[1] }}/{{ scheme.fill.split('-')[1] }}</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PREVIEW -->
+      <div class="md:col-span-2 flex flex-col gap-4">
+        
+        <!-- Live Preview Area -->
+        <div class="flex-1 bg-slate-200/50 rounded-xl border border-slate-200 border-dashed flex items-center justify-center p-8 relative overflow-hidden min-h-[400px]">
+          
+          <!-- Error State -->
+          <div v-if="error" class="absolute inset-0 bg-red-50/95 flex flex-col items-center justify-center p-6 text-center z-10 backdrop-blur-sm">
+            <svg class="w-12 h-12 text-red-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            <p class="text-red-900 font-bold text-lg">Generation Error</p>
+            <p class="text-red-700 font-medium mt-1">{{ error }}</p>
+          </div>
+
+          <!-- SVG Container -->
+          <div v-else :class="['w-full max-w-xl p-10 rounded-xl shadow-sm transition-colors duration-300 barcode-preview flex items-center justify-center', activeScheme.bg, activeScheme.fill]">
+            <div class="w-full" v-html="svgCode"></div>
+          </div>
+
+        </div>
+
+        <!-- Code Snippet Box -->
+        <div class="bg-slate-900 rounded-xl p-5 shadow-inner">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Generated SVG Wrapper</span>
+          </div>
+          <pre class="overflow-x-auto text-sm text-slate-300 font-mono leading-relaxed"><span class="text-blue-400">&lt;div</span> <span class="text-emerald-300">class</span>=<span class="text-amber-300">"{{ activeScheme.bg }} {{ activeScheme.fill }}"</span><span class="text-blue-400">&gt;</span>
+  <span class="text-slate-500">&lt;!-- svg-barcode-generator output --&gt;</span>
+  {{ svgCode.split('>')[0] }}&gt;...&lt;/svg&gt;
+<span class="text-blue-400">&lt;/div&gt;</span></pre>
+        </div>
+
+        <!-- Native BarcodeDetector Verification -->
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
+          <h3 class="text-sm font-semibold text-slate-900 mb-3 flex items-center">
+            Native BarcodeDetector API Validation
+            <span v-if="detectorSupported" class="ml-2 px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-emerald-100 text-emerald-700 rounded-full">Supported</span>
+            <span v-else class="ml-2 px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider bg-red-100 text-red-700 rounded-full">Not Supported in this browser</span>
+          </h3>
+          
+          <div v-if="detectorSupported" class="flex items-center space-x-3">
+            <div class="text-sm text-slate-500">Detected Value:</div>
+            <div v-if="detectedValue === 'Scanning...'" class="text-sm text-blue-600 font-medium animate-pulse">Scanning...</div>
+            <div v-else-if="detectedValue === 'No barcode found'" class="text-sm text-red-600 font-medium font-mono">Failed to read</div>
+            <div v-else :class="['text-sm font-bold font-mono px-2 py-1 rounded', detectedValue === data ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800']">
+              {{ detectedValue }}
+            </div>
+            
+            <div v-if="detectedValue && detectedValue !== 'Scanning...' && detectedValue !== 'No barcode found'" class="text-xs text-slate-400">
+              <span v-if="detectedValue === data">(Matches input!)</span>
+              <span v-else>(Mismatch with input)</span>
+            </div>
+          </div>
+          <div v-else class="text-sm text-slate-500">
+            Your browser does not support the native BarcodeDetector API. Try opening this page in Google Chrome or Microsoft Edge.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp, ref, computed, watch, onMounted } = Vue
+
+    createApp({
+      setup() {
+        const formats = [
+          "upc_a", "upc_e", "ean_13", "ean_8", 
+          "code_128", "code_93", "code_39", "codabar", 
+          "itf", "itf_14", "gs1_128", "msi", "pharmacode"
+        ]
+
+        const data = ref("7423522549551")
+        const format = ref("ean_13")
+        const bearerBars = ref(true)
+        const error = ref(null)
+
+        // BarcodeDetector setup
+        const detectorSupported = ref('BarcodeDetector' in window)
+        const detectedValue = ref('')
+        let detector = null
+        if (detectorSupported.value) {
+          detector = new BarcodeDetector()
+        }
+
+        const colorSchemes = [
+          { name: 'Classic (Print)', bg: 'bg-white', fill: 'fill-black' },
+          { name: 'Soft UI', bg: 'bg-slate-50', fill: 'fill-slate-900' },
+          { name: 'Dark Card', bg: 'bg-zinc-800', fill: 'fill-zinc-100' },
+          { name: 'Brand Blue', bg: 'bg-blue-50', fill: 'fill-blue-900' }
+        ]
+        const activeScheme = ref(colorSchemes[0])
+
+        // Smart defaults: inject correct sample data when format changes
+        watch(format, (newFmt) => {
+          const defaults = {
+            'ean_13': '7423522549551',
+            'upc_a': '012345678905',
+            'ean_8': '12345670',
+            'code_128': '25145024780063',
+            'code_39': 'CODE39TEST',
+            'code_93': 'CODE93',
+            'itf': '12345678',
+            'codabar': 'A1234567890B',
+            'upc_e': '01234565',
+            'itf_14': '1234567890123',
+            'gs1_128': '0112345678901234',
+            'msi': '123456',
+            'pharmacode': '42'
+          }
+          if (defaults[newFmt]) {
+            data.value = defaults[newFmt]
+            error.value = null // clear previous errors when auto-filling
+          }
+        })
+
+        // Generate SVG
+        const svgCode = computed(() => {
+          error.value = null
+          if (!data.value) return ''
+
+          try {
+            const options = {}
+            if (format.value === 'itf_14') {
+              options.bearerBars = bearerBars.value
+            }
+            
+            // Call the globally exposed IIFE object
+            const generator = window.BarcodeGenerator.default || window.BarcodeGenerator;
+            return generator.generate(data.value, format.value, options)
+          } catch (err) {
+            error.value = err.message
+            return ''
+          }
+        })
+
+        // Perform Native Detection whenever SVG changes
+        watch(svgCode, async (newSvg) => {
+          if (!detectorSupported.value || !newSvg || error.value) {
+            detectedValue.value = ''
+            return
+          }
+
+          detectedValue.value = 'Scanning...'
+
+          try {
+            // Must convert SVG string to a renderable Image for the API
+            const blob = new Blob([newSvg], { type: 'image/svg+xml;charset=utf-8' })
+            const url = URL.createObjectURL(blob)
+            const img = new Image()
+            
+            await new Promise((resolve, reject) => {
+              img.onload = resolve
+              img.onerror = reject
+              img.src = url
+            })
+
+            const barcodes = await detector.detect(img)
+            URL.revokeObjectURL(url)
+
+            if (barcodes.length > 0) {
+              detectedValue.value = barcodes[0].rawValue
+            } else {
+              detectedValue.value = 'No barcode found'
+            }
+          } catch (err) {
+            console.error("BarcodeDetector failed:", err)
+            detectedValue.value = 'No barcode found'
+          }
+        }, { immediate: true })
+
+        return {
+          formats,
+          data,
+          format,
+          bearerBars,
+          error,
+          svgCode,
+          colorSchemes,
+          activeScheme,
+          detectorSupported,
+          detectedValue
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+</html>
