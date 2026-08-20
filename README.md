@@ -24,7 +24,7 @@ Created to be easy to use, lightweight, and compatible with [Tailwind CSS](https
 ## Why use this library
 
 - Creates responsive [SVG](https://en.wikipedia.org/wiki/SVG) graphics that adapt to parent container sizes.
-- [TailwindCSS](https://tailwindcss.com/) friendly — no hardcoded fill colors on `<rect>` elements, so `fill-*` and `text-*` classes cascade freely.
+- [TailwindCSS](https://tailwindcss.com/) friendly - no hardcoded colors, so `fill-*` and `text-*` classes cascade freely.
 - Can be used in the browser ([ES2020](https://caniuse.com/?search=es2020)) and in runtimes such as [Node.js](https://nodejs.org/), [Deno](https://deno.com/), and [Bun](https://bun.sh/).
 - Works in frameworks like [React](https://react.dev/), [Vue](https://vuejs.org/), [Svelte](https://svelte.dev/), etc.
 - Compatible with [React Native](https://reactnative.dev/) / [Expo](https://expo.dev/), and should work with [NativeWind](https://www.nativewind.dev/) and [Unistyles](https://www.unistyl.es/).
