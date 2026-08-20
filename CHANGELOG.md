@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- GS1-128 barcode generation support (`gs1_128`), fully leveraging existing Code-128 engine with automatic FNC1 injection.
+- ITF-14 barcode generation support (`itf_14`), featuring automatic Mod10 check digit calculation and SVG Bearer Bars.
+- Pharmacode (Laetus) barcode generation support (`pharmacode`), for pharmaceutical encoding.
+- MSI Plessey barcode generation support (`msi`).
 - Multi-target bundling configuration with `tsdown` for ESM (`dist/index.mjs`), CommonJS (`dist/index.cjs`), and Browser (`dist/index.iife.js`).
 - TypeScript declaration generation configured natively with `tsdown` (`bun run build`).
 - UPC-E barcode generation support (`src/1d/upc_e.ts`).

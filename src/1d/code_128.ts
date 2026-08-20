@@ -210,8 +210,8 @@ export default class CODE128 {
   private static readonly START_C = "11010011100";
   private static readonly STOP_PATTERN = "1100011101011";
 
-  static generate(data: string): string {
-    const { startCode, encodedData, checksum } = this.autoEncode(data);
+  static generate(data: string, useGS1: boolean = false): string {
+    const { startCode, encodedData, checksum } = this.autoEncode(data, useGS1);
     const QUIET_ZONE = "0000000000"; // 10 modules each side (Code-128 standard)
     const binary = [
       QUIET_ZONE,
@@ -225,28 +225,35 @@ export default class CODE128 {
     return generateSimpleSvg1D(convertToPairs(convertBinaryStringToArray(binary)), binary.length);
   }
 
-  private static autoEncode(data: string): {
+  private static autoEncode(data: string, useGS1: boolean): {
     startCode: { value: number; pattern: string };
     encodedData: { value: number; pattern: string }[];
     checksum: number;
   } {
     if (/^\d{2,}$/.test(data) && data.length % 2 === 0) {
-      return this.encodeC(data);
+      return this.encodeC(data, useGS1);
     }
-    return this.encodeB(data);
+    return this.encodeB(data, useGS1);
   }
 
-  private static encodeB(data: string) {
+  private static encodeB(data: string, useGS1: boolean) {
     const start = { value: 104, pattern: this.START_B };
     let sum = start.value;
     const encoded = [];
+    
+    let position = 1;
+    if (useGS1) {
+      const fnc1 = { value: 102, pattern: "11110101110" };
+      sum += fnc1.value * position++;
+      encoded.push(fnc1);
+    }
 
     for (let i = 0; i < data.length; i++) {
       const char = data[i];
       const entry = this.CODE128_B[char];
       if (!entry) throw new Error(`Invalid CODE128-B character: ${char}`);
 
-      sum += entry.value * (i + 1);
+      sum += entry.value * position++;
       encoded.push(entry);
     }
 
@@ -254,17 +261,24 @@ export default class CODE128 {
     return { startCode: start, encodedData: encoded, checksum };
   }
 
-  private static encodeC(data: string) {
+  private static encodeC(data: string, useGS1: boolean) {
     const start = { value: 105, pattern: this.START_C };
     let sum = start.value;
     const encoded = [];
+
+    let position = 1;
+    if (useGS1) {
+      const fnc1 = { value: 102, pattern: "11110101110" };
+      sum += fnc1.value * position++;
+      encoded.push(fnc1);
+    }
 
     for (let i = 0; i < data.length; i += 2) {
       const pair = data.substr(i, 2);
       const value = parseInt(pair, 10);
       const pattern = this.getPatternForValue(value);
 
-      sum += value * (i / 2 + 1);
+      sum += value * position++;
       encoded.push({ value, pattern });
     }
 

@@ -175,4 +175,53 @@ describe('Barcode Generator', () => {
       expect(decodeSvg(svg, [BarcodeFormat.UPC_E])).toBe(code);
     });
   });
+
+  describe('ITF-14', () => {
+    test('generates valid SVG and calculates mod10', () => {
+      const code = '1234567890123';
+      const svg = SvgBarCodeGenerator.generate(code, 'itf_14');
+      expect(svg).toContain('<svg');
+      // Bearer bars check
+      expect(svg).toContain('height="10%"');
+      // Decoding it should return 14 digits (with calculated check digit)
+      // Check digit for 1234567890123:
+      // Odds: 3, 1, 9, 7, 5, 3, 1 -> 29 * 3 = 87
+      // Evens: 2, 0, 8, 6, 4, 2 -> 22
+      // Total = 109 -> Next mult of 10 is 110 -> 110 - 109 = 1.
+      expect(decodeSvg(svg, [BarcodeFormat.ITF])).toBe('12345678901231');
+    });
+  });
+
+  describe('GS1-128', () => {
+    test('generates valid SVG and decodes correctly', () => {
+      const code = '0112345678901234';
+      const svg = SvgBarCodeGenerator.generate(code, 'gs1_128');
+      expect(svg).toContain('<svg');
+      // ZXing might prefix with ]C1 (symbology identifier) or just return raw data
+      const decoded = decodeSvg(svg, [BarcodeFormat.CODE_128]);
+      // Some decoders strip FNC1, some include the raw text. Let's just expect it contains the code.
+      expect(decoded.includes(code)).toBe(true);
+    });
+  });
+
+  describe('MSI Plessey', () => {
+    test('generates valid SVG', () => {
+      const code = '123456';
+      const svg = SvgBarCodeGenerator.generate(code, 'msi');
+      expect(svg).toContain('<svg');
+    });
+  });
+
+  describe('Pharmacode', () => {
+    test('generates valid SVG for normal value', () => {
+      const code = '131070';
+      const svg = SvgBarCodeGenerator.generate(code, 'pharmacode');
+      expect(svg).toContain('<svg');
+    });
+
+    test('throws for out of range value', () => {
+      expect(() => SvgBarCodeGenerator.generate('2', 'pharmacode')).toThrow();
+      expect(() => SvgBarCodeGenerator.generate('131071', 'pharmacode')).toThrow();
+    });
+  });
 });
