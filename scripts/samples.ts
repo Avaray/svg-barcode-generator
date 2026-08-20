@@ -11,7 +11,7 @@ export interface Sample {
 }
 
 export const samples: Sample[] = [
-  { type: 'ean_13',     code: '7423522549551' },
+  { type: 'ean_13',    code: '7423522549551' },
   { type: 'upc_a',     code: '012345678905' },
   { type: 'ean_8',     code: '12345670' },
   { type: 'code_128',  code: '25145024780063' },
