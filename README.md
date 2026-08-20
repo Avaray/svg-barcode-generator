@@ -24,8 +24,8 @@ Created to be easy to use, lightweight, and compatible with [Tailwind CSS](https
 ## Why use this library
 
 - Creates responsive [SVG](https://en.wikipedia.org/wiki/SVG) graphics that adapt to parent container sizes.
-- First-class [TypeScript](https://www.typescriptlang.org/) support — includes type definitions out of the box.
-- [TailwindCSS](https://tailwindcss.com/) friendly — no hardcoded fill colors on `<rect>` elements, so `fill-*` and `text-*` classes cascade freely.
+- First-class [TypeScript](https://www.typescriptlang.org/) support - includes type definitions out of the box.
+- [TailwindCSS](https://tailwindcss.com/) friendly - no hardcoded fill colors on `<rect>` elements, so `fill-*` and `text-*` classes cascade freely.
 - Can be used in the browser ([ES2020](https://caniuse.com/?search=es2020)) and in runtimes such as [Node.js](https://nodejs.org/), [Deno](https://deno.com/), and [Bun](https://bun.sh/).
 - Works in frameworks like [React](https://react.dev/), [Vue](https://vuejs.org/), [Svelte](https://svelte.dev/), etc.
 - Compatible with [React Native](https://reactnative.dev/) / [Expo](https://expo.dev/), and should work with [NativeWind](https://www.nativewind.dev/) and [Unistyles](https://www.unistyl.es/).
@@ -61,7 +61,7 @@ export const Barcode = () => {
 
 #### Options (ITF-14)
 
-ITF-14 supports an optional third argument to control [Bearer Bars](https://en.wikipedia.org/wiki/ITF-14#Bearer_bars) — the horizontal borders required by the GS1 standard for physical label printing. They are enabled by default.
+ITF-14 supports an optional third argument to control [Bearer Bars](https://en.wikipedia.org/wiki/ITF-14#Bearer_bars) - the horizontal borders required by the GS1 standard for physical label printing. They are enabled by default.
 
 ```ts
 // With bearer bars (GS1-compliant, default)
@@ -89,10 +89,10 @@ Since the generated SVG has no hardcoded colors, bars inherit the `fill` CSS pro
 
 ## Notes on specific formats
 
-- **`upc_a`** — alias for `ean_13`. UPC-A (12 digits) is a subset of EAN-13 (13 digits with a leading `0`).
-- **`gs1_128`** — Code 128 with an FNC1 character automatically injected at position 1. Physical scanners will prefix decoded output with `]C1` (AIM Symbology Identifier). Software decoders (e.g. ZXing) typically return raw data without this prefix.
-- **`itf_14`** — Accepts 13 digits (check digit auto-calculated via Mod 10) or 14 digits directly.
-- **`pharmacode`** — Accepts numeric values from `3` to `131070`.
+- **`upc_a`** - alias for `ean_13`. UPC-A (12 digits) is a subset of EAN-13 (13 digits with a leading `0`).
+- **`gs1_128`** - Code 128 with an FNC1 character automatically injected at position 1. Physical scanners will prefix decoded output with `]C1` (AIM Symbology Identifier). Software decoders (e.g. ZXing) typically return raw data without this prefix.
+- **`itf_14`** - Accepts 13 digits (check digit auto-calculated via Mod 10) or 14 digits directly.
+- **`pharmacode`** - Accepts numeric values from `3` to `131070`.
 
 ## Materials
 
