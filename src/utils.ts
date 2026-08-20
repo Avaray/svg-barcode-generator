@@ -26,11 +26,24 @@ export function convertToPairs(bars: number[]): [number, number][] {
   return pairs;
 }
 
-export function generateSimpleSvg1D(groupedPairs: [number, number][]): string {
-  const maxWidth = groupedPairs.reduce(
-    (max, [pos, width]) => Math.max(max, pos + width),
-    0,
-  );
+/**
+ * Generates a minimal SVG containing only black bars (rects).
+ * White space is implied by the gaps between rects.
+ *
+ * @param groupedPairs  Output of convertToPairs — [startModule, widthModules][]
+ * @param totalModules  Total number of modules in the binary string (incl. quiet zones).
+ *                      When provided, percentages are calculated against this value so
+ *                      leading and trailing quiet zones are preserved correctly.
+ *                      Defaults to the end of the last bar when omitted.
+ */
+export function generateSimpleSvg1D(
+  groupedPairs: [number, number][],
+  totalModules?: number,
+): string {
+  const maxWidth =
+    totalModules ??
+    groupedPairs.reduce((max, [pos, width]) => Math.max(max, pos + width), 0);
+
   const widthPerUnit = 100 / maxWidth;
 
   const rectangles = groupedPairs.map(([position, width]) => {
@@ -39,7 +52,7 @@ export function generateSimpleSvg1D(groupedPairs: [number, number][]): string {
     return `<rect x="${x}%" width="${w}%" height="100%"/>`;
   });
 
-  return `<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">${
+  return `<svg width="100%" height="100%" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">${
     rectangles.join("")
   }</svg>`;
 }

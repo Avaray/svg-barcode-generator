@@ -14,17 +14,17 @@ export default class Codabar {
     "9": "110100101",
     "-": "101001101",
     "$": "101100101",
-    ":": "1101011011",
-    "/": "1101101011",
-    ".": "1101101101",
+    ":": "1101010011",
+    "/": "1101001011",
+    ".": "1101001101",
     "+": "101100110011",
     "A": "1011001001",
-    "B": "1010010011",
-    "C": "1001001011",
+    "B": "1001001011",
+    "C": "1010010011",
     "D": "1010011001",
   };
 
-  private static readonly QUIET_ZONE = "00000";
+  private static readonly QUIET_ZONE = "0000000000";
   private static readonly INTERCHAR_GAP = "0";
 
   static generate(data: string): string {
@@ -34,7 +34,7 @@ export default class Codabar {
     const binary = this.generateBinary(data);
     const array = convertBinaryStringToArray(binary);
     const pairs = convertToPairs(array);
-    return generateSimpleSvg1D(pairs);
+    return generateSimpleSvg1D(pairs, binary.length);
   }
 
   private static generateBinary(data: string): string {

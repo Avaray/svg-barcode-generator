@@ -39,11 +39,12 @@ export default class EAN8 {
     const array = convertBinaryStringToArray(binary);
     const pairs = convertToPairs(array);
 
-    return generateSimpleSvg1D(pairs);
+    return generateSimpleSvg1D(pairs, binary.length);
   }
 
   private static generateBinary(data: string): string {
-    let binary = this.GUARD_PATTERN;
+    const QUIET_ZONE = "0000000"; // Minimum 7 modules quiet zone for EAN
+    let binary = QUIET_ZONE + this.GUARD_PATTERN;
 
     // First 4 digits (left side)
     for (let i = 0; i < 4; i++) {
@@ -57,7 +58,7 @@ export default class EAN8 {
       binary += this.RIGHT_ENCODINGS[data[i]];
     }
 
-    binary += this.GUARD_PATTERN;
+    binary += this.GUARD_PATTERN + QUIET_ZONE;
 
     return binary;
   }

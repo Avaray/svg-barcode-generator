@@ -212,14 +212,17 @@ export default class CODE128 {
 
   static generate(data: string): string {
     const { startCode, encodedData, checksum } = this.autoEncode(data);
+    const QUIET_ZONE = "0000000000"; // 10 modules each side (Code-128 standard)
     const binary = [
+      QUIET_ZONE,
       startCode.pattern,
       ...encodedData.map((c) => c.pattern),
       this.getPatternForValue(checksum),
       this.STOP_PATTERN,
+      QUIET_ZONE,
     ].join("");
 
-    return generateSimpleSvg1D(convertToPairs(convertBinaryStringToArray(binary)));
+    return generateSimpleSvg1D(convertToPairs(convertBinaryStringToArray(binary)), binary.length);
   }
 
   private static autoEncode(data: string): {
@@ -269,7 +272,20 @@ export default class CODE128 {
     return { startCode: start, encodedData: encoded, checksum };
   }
 
+  private static readonly MISSING_PATTERNS: { [key: number]: string } = {
+    96: "10111100010",
+    97: "11110101000",
+    98: "11110100010",
+    99: "10111011110",
+    100: "10111101110",
+    101: "11101011110",
+    102: "11110101110",
+  };
+
   private static getPatternForValue(value: number): string {
+    if (this.MISSING_PATTERNS[value]) {
+      return this.MISSING_PATTERNS[value];
+    }
     // Search all code sets for the value
     const find = (set: CodeSet) => Object.entries(set).find(([, entry]) => entry.value === value);
 

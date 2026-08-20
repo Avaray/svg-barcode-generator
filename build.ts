@@ -1,5 +1,4 @@
 import * as esbuild from "esbuild";
-import { denoPlugins } from "@luca/esbuild-deno-loader";
 
 // Shared settings
 const sharedConfig = {
@@ -7,7 +6,6 @@ const sharedConfig = {
   bundle: true,
   sourcemap: true,
   target: "es2020",
-  plugins: [...denoPlugins()],
 };
 
 try {
@@ -39,7 +37,7 @@ try {
   console.log("Bundle generation complete!");
 } catch (error) {
   console.error("Build failed:", error);
-  Deno.exit(1);
+  process.exit(1);
 } finally {
   esbuild.stop();
 }

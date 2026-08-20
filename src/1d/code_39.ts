@@ -49,10 +49,11 @@ export default class Code39 {
   };
 
   private static generateBinaryRepresentation(data: string): string {
+    const QUIET_ZONE = "0000000000"; // 10 narrow modules each side (standard minimum)
     // Add start/stop characters
     const fullData = `*${data}*`;
 
-    let binary = "";
+    let binary = QUIET_ZONE;
     for (const char of fullData) {
       const encoding = this.CHARACTER_ENCODINGS[char];
       if (!encoding) {
@@ -61,8 +62,8 @@ export default class Code39 {
       binary += encoding + "0"; // Add inter-character gap
     }
 
-    // Remove last extra gap and add termination bar
-    return binary.slice(0, -1) + "1";
+    // Remove last extra gap and add trailing quiet zone
+    return binary.slice(0, -1) + QUIET_ZONE;
   }
 
   public static generate(data: string): string {
@@ -73,7 +74,7 @@ export default class Code39 {
     const binary = this.generateBinaryRepresentation(data.toUpperCase());
     const array = convertBinaryStringToArray(binary);
     const pairs = convertToPairs(array);
-    return generateSimpleSvg1D(pairs);
+    return generateSimpleSvg1D(pairs, binary.length);
   }
 
   public static validate(data: string): boolean {

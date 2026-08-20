@@ -1,3 +1,4 @@
+import upc_e from "./1d/upc_e.ts";
 import ean_13 from "./1d/ean_13.ts";
 import ean_8 from "./1d/ean_8.ts";
 import code_128 from "./1d/code_128.ts";
@@ -6,11 +7,13 @@ import code_39 from "./1d/code_39.ts";
 import codabar from "./1d/codabar.ts";
 import itf from "./1d/itf.ts";
 
-type CodeTypes = "upc_a" | "ean_13" | "ean_8" | "code_128" | "code_93" | "code_39" | "codabar" | "itf";
+type CodeTypes = "upc_a" | "upc_e" | "ean_13" | "ean_8" | "code_128" | "code_93" | "code_39" | "codabar" | "itf";
 
 export default class TsBarcodeGenerator {
   public static generate(code: string, type: CodeTypes): string {
     switch (type) {
+      case "upc_e":
+        return upc_e.generate(code);
       case "upc_a":
       case "ean_13":
         return ean_13.generate(code);

@@ -39,7 +39,7 @@ export default class ITF {
     // Convert to SVG using utility functions
     const array = convertBinaryStringToArray(binary);
     const pairs = convertToPairs(array);
-    return generateSimpleSvg1D(pairs);
+    return generateSimpleSvg1D(pairs, binary.length);
   }
 
   // Encode a pair of digits into a binary string

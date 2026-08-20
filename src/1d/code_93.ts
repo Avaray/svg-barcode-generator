@@ -62,15 +62,17 @@ export default class Code93 {
     const array = convertBinaryStringToArray(binary);
     const pairs = convertToPairs(array);
 
-    return generateSimpleSvg1D(pairs);
+    return generateSimpleSvg1D(pairs, binary.length);
   }
 
   private static generateBinary(data: string): string {
-    let binary = "";
+    const QUIET_ZONE = "0000000000"; // 10 modules
+    let binary = QUIET_ZONE;
     for (const char of data) {
       binary += this.CHARACTER_ENCODINGS[char] || "";
     }
-    return binary + "1"; // Add termination bar
+    // Add termination bar and trailing quiet zone
+    return binary + "1" + QUIET_ZONE;
   }
 
   private static calculateChecksums(data: string): string {
