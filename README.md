@@ -29,7 +29,7 @@ Created to be easy to use, lightweight, and compatible with [Tailwind CSS](https
 - Can be used in the browser ([ES2020](https://caniuse.com/?search=es2020)) and in runtimes such as [Node.js](https://nodejs.org/), [Deno](https://deno.com/), and [Bun](https://bun.sh/).
 - Works in frameworks like [React](https://react.dev/), [Vue](https://vuejs.org/), [Svelte](https://svelte.dev/), etc.
 - Compatible with [React Native](https://reactnative.dev/) / [Expo](https://expo.dev/), and should work with [NativeWind](https://www.nativewind.dev/) and [Unistyles](https://www.unistyl.es/).
-- [Tree-shakeable](https://en.wikipedia.org/wiki/Tree_shaking) — your bundler automatically removes unused formats to keep your app lightweight.
+- [Tree-shakeable](https://en.wikipedia.org/wiki/Tree_shaking) - your bundler automatically removes unused formats to keep your app lightweight.
 - Dependency-free.
 
 ## Usage
