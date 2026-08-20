@@ -177,17 +177,21 @@ describe('Barcode Generator', () => {
   });
 
   describe('ITF-14', () => {
-    test('generates valid SVG and calculates mod10', () => {
+    test('generates valid SVG with bearer bars by default', () => {
       const code = '1234567890123';
       const svg = SvgBarCodeGenerator.generate(code, 'itf_14');
       expect(svg).toContain('<svg');
-      // Bearer bars check
       expect(svg).toContain('height="10%"');
-      // Decoding it should return 14 digits (with calculated check digit)
-      // Check digit for 1234567890123:
-      // Odds: 3, 1, 9, 7, 5, 3, 1 -> 29 * 3 = 87
-      // Evens: 2, 0, 8, 6, 4, 2 -> 22
-      // Total = 109 -> Next mult of 10 is 110 -> 110 - 109 = 1.
+      expect(svg).toContain('y="10%"');
+      expect(decodeSvg(svg, [BarcodeFormat.ITF])).toBe('12345678901231');
+    });
+
+    test('generates valid SVG without bearer bars when bearerBars: false', () => {
+      const code = '1234567890123';
+      const svg = SvgBarCodeGenerator.generate(code, 'itf_14', { bearerBars: false });
+      expect(svg).toContain('<svg');
+      expect(svg).not.toContain('height="10%"');
+      expect(svg).not.toContain('y="10%"');
       expect(decodeSvg(svg, [BarcodeFormat.ITF])).toBe('12345678901231');
     });
   });

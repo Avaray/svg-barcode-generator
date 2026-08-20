@@ -13,8 +13,13 @@ import pharmacode from "./1d/pharmacode.ts";
 
 type CodeTypes = "upc_a" | "upc_e" | "ean_13" | "ean_8" | "code_128" | "code_93" | "code_39" | "codabar" | "itf" | "itf_14" | "gs1_128" | "msi" | "pharmacode";
 
+export interface GenerateOptions {
+  /** ITF-14 only: draw GS1-compliant horizontal bearer bars at top and bottom. Default: true */
+  bearerBars?: boolean;
+}
+
 export default class TsBarcodeGenerator {
-  public static generate(code: string, type: CodeTypes): string {
+  public static generate(code: string, type: CodeTypes, options: GenerateOptions = {}): string {
     switch (type) {
       case "upc_e":
         return upc_e.generate(code);
@@ -34,7 +39,7 @@ export default class TsBarcodeGenerator {
       case "itf":
         return itf.generate(code);
       case "itf_14":
-        return itf_14.generate(code);
+        return itf_14.generate(code, options.bearerBars ?? true);
       case "gs1_128":
         return gs1_128.generate(code);
       case "msi":

@@ -17,7 +17,7 @@ export default class ITF_14 {
     "9": [1, 2, 1, 2, 1],
   };
 
-  static generate(data: string): string {
+  static generate(data: string, bearerBars: boolean = true): string {
     if (!/^\d+$/.test(data)) {
       throw new Error("Invalid ITF-14 format. Must be numeric.");
     }
@@ -25,10 +25,8 @@ export default class ITF_14 {
     let encodedData = data;
 
     if (encodedData.length === 13) {
-      // Calculate Mod 10 check digit
       encodedData += this.calculateCheckDigit(encodedData);
     } else if (encodedData.length !== 14) {
-      // Pad to 14 digits with leading zeros
       encodedData = encodedData.padStart(14, "0");
     }
 
@@ -41,27 +39,26 @@ export default class ITF_14 {
     const array = convertBinaryStringToArray(binary);
     const pairs = convertToPairs(array);
     const totalModules = binary.length;
-
-    // Bearer bar standard thickness is roughly 4.8 * module width.
-    // Let's use 5 modules thickness.
-    // SVG total height is typically 100%. Bearer bars take top and bottom.
-    // But since percentages are easier, we can just draw them.
-    // However, SVG percentage height doesn't allow fixed module width unless viewBox is used.
-    // We'll just draw top and bottom rects occupying some vertical percentage.
-
     const widthPerUnit = 100 / totalModules;
-    
-    // Draw the main barcode rects in the center
+
+    if (!bearerBars) {
+      // Plain ITF-14 without bearer bars — identical to standard ITF rendering
+      const rectangles = pairs.map(([position, width]) => {
+        const x = (position * widthPerUnit).toFixed(3);
+        const w = (width * widthPerUnit).toFixed(3);
+        return `<rect x="${x}%" width="${w}%" height="100%"/>`;
+      });
+      return `<svg width="100%" height="100%" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">${rectangles.join("")}</svg>`;
+    }
+
+    // GS1-compliant: bars occupy 80% of height, bearer bars take top and bottom 10%
     const rectangles = pairs.map(([position, width]) => {
       const x = (position * widthPerUnit).toFixed(3);
       const w = (width * widthPerUnit).toFixed(3);
       return `<rect x="${x}%" y="10%" width="${w}%" height="80%"/>`;
     });
 
-    // Add horizontal Bearer Bars
-    // Top border
     rectangles.push(`<rect x="0" y="0" width="100%" height="10%"/>`);
-    // Bottom border
     rectangles.push(`<rect x="0" y="90%" width="100%" height="10%"/>`);
 
     return `<svg width="100%" height="100%" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">${rectangles.join("")}</svg>`;
