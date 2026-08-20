@@ -8,8 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Multi-target bundling configuration with `esbuild` for ESM (`dist/index.mjs`), CommonJS (`dist/index.cjs`), and Browser (`dist/index.browser.js`).
-- TypeScript declaration generation configured in build scripts (`npm run build`).
+- Multi-target bundling configuration with `tsdown` for ESM (`dist/index.mjs`), CommonJS (`dist/index.cjs`), and Browser (`dist/index.iife.js`).
+- TypeScript declaration generation configured natively with `tsdown` (`bun run build`).
 - UPC-E barcode generation support (`src/1d/upc_e.ts`).
 - Automated barcode verification test suite using `bun:test`, `@zxing/library`, and `@resvg/resvg-js` (`tests/barcode.test.ts`).
 - `shape-rendering="crispEdges"` on SVG root element to ensure crisp bar rendering across renderers.

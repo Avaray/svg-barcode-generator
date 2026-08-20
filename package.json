@@ -5,13 +5,16 @@
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": {
+        "import": "./dist/index.d.mts",
+        "require": "./dist/index.d.cts"
+      },
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs",
-      "browser": "./dist/index.browser.js"
+      "browser": "./dist/index.iife.js"
     }
   },
   "files": [
@@ -54,9 +57,7 @@
     "url": "https://github.com/Avaray/svg-barcode-generator"
   },
   "scripts": {
-    "build:bundle": "bun build.ts",
-    "build:types": "tsc --emitDeclarationOnly --project tsconfig.json",
-    "build": "bun run build:bundle && bun run build:types",
+    "build": "tsdown",
     "test": "bun test"
   },
   "devDependencies": {
@@ -65,8 +66,8 @@
     "@types/node": "^26.2.0",
     "@types/pngjs": "^6.0.5",
     "@zxing/library": "^0.23.0",
-    "esbuild": "^0.28.2",
     "pngjs": "^7.0.0",
+    "tsdown": "^0.22.14",
     "typescript": "^7.0.2"
   }
 }
