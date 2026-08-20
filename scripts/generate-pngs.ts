@@ -26,7 +26,7 @@ const samples: Sample[] = [
   { type: 'itf_14',   code: '1234567890123', options: { bearerBars: false }, filename: 'itf_14_without_bearer_bars' },
   { type: 'gs1_128',  code: '0112345678901234' },
   { type: 'msi',      code: '123456' },
-  { type: 'pharmacode', code: '131070' },
+  { type: 'pharmacode', code: '42' },
 ];
 
 const outDir = join(import.meta.dir, '../samples');
