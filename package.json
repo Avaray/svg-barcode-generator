@@ -1,63 +1,10 @@
 {
-  "name": "svg-barcode-generator",
-  "description": "Barcode Generator compatible with Mobile, Browsers and JavaScript Runtimes",
-  "version": "1.0.0",
-  "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
-  "exports": {
-    ".": {
-      "types": {
-        "import": "./dist/index.d.mts",
-        "require": "./dist/index.d.cts"
-      },
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs",
-      "browser": "./dist/index.iife.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "keywords": [
-    "barcode",
-    "codabar",
-    "code-128",
-    "code-39",
-    "code-93",
-    "code",
-    "code128",
-    "code39",
-    "code93",
-    "ean-13",
-    "ean-8",
-    "ean",
-    "ean13",
-    "ean8",
-    "generator",
-    "gs1",
-    "gtin",
-    "itf",
-    "svg",
-    "upc-a",
-    "upc-e",
-    "upc"
-  ],
   "author": {
-    "name": "Dawid Wasowski",
     "email": "deffqqq@gmail.com",
+    "name": "Dawid Wasowski",
     "url": "https://dav.one/"
   },
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Avaray/svg-barcode-generator"
-  },
-  "scripts": {
-    "build": "tsdown",
-    "test": "bun test"
-  },
+  "description": "Lightweight SVG barcode generator for browsers, mobile, and modern JS runtimes",
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
     "@types/bun": "^1.3.14",
@@ -67,5 +14,58 @@
     "pngjs": "^7.0.0",
     "tsdown": "^0.22.14",
     "typescript": "^7.0.2"
-  }
+  },
+  "exports": {
+    ".": {
+      "browser": "./dist/index.iife.js",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": {
+        "import": "./dist/index.d.mts",
+        "require": "./dist/index.d.cts"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "barcode",
+    "codabar",
+    "code",
+    "code-128",
+    "code-39",
+    "code-93",
+    "code128",
+    "code39",
+    "code93",
+    "ean",
+    "ean-13",
+    "ean-8",
+    "ean13",
+    "ean8",
+    "generator",
+    "gs1",
+    "gtin",
+    "itf",
+    "svg",
+    "upc",
+    "upc-a",
+    "upc-e"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "name": "svg-barcode-generator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Avaray/svg-barcode-generator"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "test": "bun test"
+  },
+  "type": "module",
+  "types": "./dist/index.d.mts",
+  "version": "1.0.0"
 }
