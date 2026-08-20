@@ -1,88 +1,107 @@
 # SVG Barcode Generator
 
-Simple one-dimensional [barcode](https://en.wikipedia.org/wiki/Barcode) generator focused on scalability and
-themability.\
-Created to be easy to use, lightweight, and compatible with [Tailwind CSS](Tailwind).
+Simple one-dimensional [barcode](https://en.wikipedia.org/wiki/Barcode) generator focused on scalability and themability.\
+Created to be easy to use, lightweight, and compatible with [Tailwind CSS](https://tailwindcss.com/).
 
-## Supported code formats
+## Supported formats
 
-- [upc_a](https://en.wikipedia.org/wiki/Universal_Product_Code)
-- [ean_13](https://en.wikipedia.org/wiki/International_Article_Number)
-- [ean_8](https://en.wikipedia.org/wiki/International_Article_Number)
-- [code_128](https://en.wikipedia.org/wiki/Code_128)
-- [code_93](https://en.wikipedia.org/wiki/Code_93)
-- [code_39](https://en.wikipedia.org/wiki/Code_39)
-- [codabar](https://en.wikipedia.org/wiki/Codabar)
-- [itf](https://en.wikipedia.org/wiki/Interleaved_2_of_5)
+| Type key | Standard | Use case |
+|---|---|---|
+| `upc_a` | [UPC-A](https://en.wikipedia.org/wiki/Universal_Product_Code) | Retail (North America) |
+| `upc_e` | [UPC-E](https://en.wikipedia.org/wiki/Universal_Product_Code#UPC-E) | Retail, compact packaging |
+| `ean_13` | [EAN-13](https://en.wikipedia.org/wiki/International_Article_Number) | Retail (worldwide) |
+| `ean_8` | [EAN-8](https://en.wikipedia.org/wiki/EAN-8) | Retail, small packaging |
+| `code_128` | [Code 128](https://en.wikipedia.org/wiki/Code_128) | Logistics, shipping |
+| `gs1_128` | [GS1-128](https://en.wikipedia.org/wiki/GS1-128) | Supply chain, logistics (Code 128 + FNC1) |
+| `code_93` | [Code 93](https://en.wikipedia.org/wiki/Code_93) | Industrial, inventory |
+| `code_39` | [Code 39](https://en.wikipedia.org/wiki/Code_39) | Industrial, automotive, military |
+| `itf` | [ITF (Interleaved 2 of 5)](https://en.wikipedia.org/wiki/Interleaved_2_of_5) | Warehouse, distribution |
+| `itf_14` | [ITF-14](https://en.wikipedia.org/wiki/ITF-14) | Cartons, pallets (GS1 shipping containers) |
+| `codabar` | [Codabar](https://en.wikipedia.org/wiki/Codabar) | Libraries, blood banks, FedEx |
+| `msi` | [MSI Plessey](https://en.wikipedia.org/wiki/MSI_Barcode) | Retail shelf labels, inventory |
+| `pharmacode` | [Pharmacode](https://en.wikipedia.org/wiki/Pharmacode) | Pharmaceutical packaging |
 
-## Why to use this library
+## Why use this library
 
 - Creates responsive [SVG](https://en.wikipedia.org/wiki/SVG) graphics that adapt to parent container sizes.
-- Is [TailwindCSS](https://tailwindcss.com/) friendly (you can easily apply foreground and background colors).
-- Can be used in the browser ([ES2017](https://caniuse.com/?search=es2017)) and in runtimes such as
-  [Node](https://nodejs.org/), [Deno](https://deno.com/), and [Bun](https://bun.sh/).
-- Can be used in frameworks like [React](https://react.dev/), [Vue](https://vuejs.org/), [Svelte](https://svelte.dev/),
-  etc.
-- Can be used in [React Native](https://reactnative.dev/) and [Expo](https://expo.dev/). Should be compatible with
-  [NativeWind](https://www.nativewind.dev/) and [Unistyles](https://www.unistyl.es/).
-- Names of formats are compatible with
-  [Barcode Detection API formats](https://developer.mozilla.org/en-US/docs/Web/API/Barcode_Detection_API#supported_barcode_formats).
-- Is dependency-free.
-- Is easy to use.
-
-## Why you shouldn't use this library
-
-- It has not been battle-tested yet. Might have bugs.
-- Whether the project will be developed further depends on my willingness to work.
-
-## Idea
-
-Among the libraries available on [NPM](https://www.npmjs.com/), none met my needs. Some lacked
-[tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking), others required complex configurations
-just to generate decent looking SVG, and some applied colors that couldn’t be easily overridden with Tailwind. So, I
-decided to create my own library.
+- [TailwindCSS](https://tailwindcss.com/) friendly — no hardcoded fill colors on `<rect>` elements, so `fill-*` and `text-*` classes cascade freely.
+- Can be used in the browser ([ES2020](https://caniuse.com/?search=es2020)) and in runtimes such as [Node.js](https://nodejs.org/), [Deno](https://deno.com/), and [Bun](https://bun.sh/).
+- Works in frameworks like [React](https://react.dev/), [Vue](https://vuejs.org/), [Svelte](https://svelte.dev/), etc.
+- Compatible with [React Native](https://reactnative.dev/) / [Expo](https://expo.dev/), and should work with [NativeWind](https://www.nativewind.dev/) and [Unistyles](https://www.unistyl.es/).
+- Dependency-free.
+- Tree-shakeable.
 
 ## Usage
 
-#### Common
+#### Basic
 
 ```ts
 import SvgBarcodeGenerator from "svg-barcode-generator";
 
-const barcode = SvgBarcodeGenerator.generate("7423522549551", "ean_13");
+const svg = SvgBarcodeGenerator.generate("7423522549551", "ean_13");
 
-console.log(barcode);
+console.log(svg); // <svg ...>...</svg>
 ```
 
-#### React + TailwindCSS
+#### React + Tailwind CSS
 
-```ts
+```tsx
 import SvgBarcodeGenerator from "svg-barcode-generator";
 
-export const YourComponent = () => {
-  const barcode = SvgBarcodeGenerator.generate("7423522549551", "ean_13");
+export const Barcode = () => {
+  const svg = SvgBarcodeGenerator.generate("7423522549551", "ean_13");
   return (
     <div className="p-6 bg-white fill-current text-black">
-      <div dangerouslySetInnerHTML={{ __html: barcode }} />
+      <div dangerouslySetInnerHTML={{ __html: svg }} />
     </div>
   );
 };
 ```
 
-## Materials you can check before use
+#### Options (ITF-14)
+
+ITF-14 supports an optional third argument to control [Bearer Bars](https://en.wikipedia.org/wiki/ITF-14#Bearer_bars) — the horizontal borders required by the GS1 standard for physical label printing. They are enabled by default.
+
+```ts
+// With bearer bars (GS1-compliant, default)
+SvgBarcodeGenerator.generate("1234567890123", "itf_14");
+
+// Without bearer bars (cleaner SVG, easier to style)
+SvgBarcodeGenerator.generate("1234567890123", "itf_14", { bearerBars: false });
+```
+
+#### Coloring with Tailwind CSS
+
+Since the generated SVG has no hardcoded colors, bars inherit the `fill` CSS property and the background is transparent. You can apply any color via Tailwind:
+
+```tsx
+// Black bars on white background
+<div className="bg-white text-black fill-current">
+  <div dangerouslySetInnerHTML={{ __html: svg }} />
+</div>
+
+// Dark bars on colored background
+<div className="bg-yellow-100 text-gray-900 fill-current">
+  <div dangerouslySetInnerHTML={{ __html: svg }} />
+</div>
+```
+
+## Notes on specific formats
+
+- **`upc_a`** — alias for `ean_13`. UPC-A (12 digits) is a subset of EAN-13 (13 digits with a leading `0`).
+- **`gs1_128`** — Code 128 with an FNC1 character automatically injected at position 1. Physical scanners will prefix decoded output with `]C1` (AIM Symbology Identifier). Software decoders (e.g. ZXing) typically return raw data without this prefix.
+- **`itf_14`** — Accepts 13 digits (check digit auto-calculated via Mod 10) or 14 digits directly.
+- **`pharmacode`** — Accepts numeric values from `3` to `131070`.
+
+## Materials
 
 - [Color Selection for Barcode Symbols](https://www.barcode.graphics/upc-color-guide)
-- [Barcode Symbology](https://www.scandit.com/products/barcode-scanning/symbologies)
-- [Wikipedia.org/Barcode](https://en.wikipedia.org/wiki/Barcode)
-
-## TODO
-
-- [ ] Check ean_13 (seems to be broken)
-- [ ] Add support for upc_e (the last one of planned 1D formats)
-- [ ] Add automatic testing
+- [GS1 Barcode Types](https://www.gs1.org/standards/barcodes)
+- [Barcode Symbologies – Scandit](https://www.scandit.com/products/barcode-scanning/symbologies)
+- [Wikipedia – Barcode](https://en.wikipedia.org/wiki/Barcode)
 
 ## Support the project
 
-If you see potential in this project and want to help - feel free to contribute.
+If you see potential in this project and want to help — feel free to contribute.
 
 You can contact me on [LinkedIn](https://www.linkedin.com/in/wasowsky/) or Discord: `avaray_`
