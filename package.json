@@ -1,9 +1,5 @@
 {
-  "author": {
-    "email": "deffqqq@gmail.com",
-    "name": "Dawid Wasowski",
-    "url": "https://dav.one/"
-  },
+  "author": "Dawid Wasowski",
   "description": "Lightweight SVG barcode generator for browsers, mobile, and modern JS runtimes",
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
