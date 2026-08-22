@@ -1,6 +1,6 @@
 {
   "author": "Dawid Wasowski",
-  "description": "Lightweight SVG barcode generator for browsers, mobile, and modern JS runtimes",
+  "description": "Lightweight one-dimensional barcode generator producing scalable SVG vectors, with support for Mobile, Browsers and JavaScript Runtimes",
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
     "@types/bun": "^1.3.14",
